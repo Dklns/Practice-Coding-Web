@@ -1,0 +1,49 @@
+* {
+    /* 常规初始化 */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    min-height: 100vh;
+    background: radial-gradient(#33bbff, #1144ff);
+}
+
+.box {
+    /* 使眼睛呈水平分布 */
+    display: flex;
+    /* 眼睛间隔 */
+    gap: 4vmin;
+}
+
+.box .eye {
+    width: 20vmin;
+    height: 20vmin;
+    background-color: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 4vmin rgba(0, 0, 0, .2), inset 0 0 2vmin #33bbff,
+        inset 0 0 4vmin #3bf;
+    position: relative;
+}
+
+.box .eye::before {
+    content: "";
+    display: block;
+    width: 40%;
+    height: 40%;
+    background-color: #333;
+    border: 1vmin solid #3bf;
+    border-radius: 50%;
+    /* 因为初始化那里无法作用于伪元素，所以需要在此声明 */
+    box-sizing: border-box;
+
+    position: relative;
+    top: 50%;
+    left: 30%;
+    transform: translate(-50%, -50%);
+}
