@@ -1,0 +1,80 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+
+    min-height: 100vh;
+    background-color: #15171e;
+}
+
+.box {
+    width: 30vmin;
+    height: 30vmin;
+
+    position: relative;
+}
+
+.box div {
+    /* 子盒子撑大父盒子，三个一样 */
+    width: 100%;
+    height: 100%;
+
+    border-radius: 50%;
+
+    /* 分别设置四个边框粗细，颜色，这样就会出现一个不规则图形 */
+    border-top: 4vmin solid #148eff;
+    border-right: 1vmin solid #148eff;
+    border-bottom: 6vmin solid transparent;
+    border-left: 0 solid transparent;
+
+    /* 定位叠中间 */
+    position: absolute;
+}
+
+.box div:nth-child(1) {
+    /* 分别给每个形状设置默认旋转角度，分散开 */
+    transform: rotateX(60deg) rotateY(0deg);
+    /* 由于每个盒子的角度不同，所以动画也分开写 */
+    animation: rotate-1 1s linear infinite;
+}
+
+.box div:nth-child(2) {
+    transform: rotateX(60deg) rotateY(60deg);
+    animation: rotate-2 1s linear infinite;
+    /* 其中一个延时不变，另外两个调整到合适时间 */
+    animation-delay: -0.6s;
+}
+
+.box div:nth-child(3) {
+    transform: rotateX(60deg) rotateY(-60deg);
+    animation: rotate-3 1s linear infinite;
+    animation-delay: -0.4s;
+}
+
+@keyframes rotate-1 {
+
+    /* 保持原角度，并旋转一周 */
+    100% {
+        transform: rotateX(60deg) rotateY(0deg) rotate(360deg);
+    }
+}
+
+@keyframes rotate-2 {
+    100% {
+        transform: rotateX(60deg) rotateY(60deg) rotate(360deg);
+    }
+}
+
+@keyframes rotate-3 {
+    100% {
+        transform: rotateX(60deg) rotateY(-60deg) rotate(360deg);
+    }
+
+}
