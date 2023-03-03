@@ -10,7 +10,7 @@ function resolvePromise(promise2, x, resolve, reject) {
     }
 
     let called = false;
-    if (typeof x === 'object' && x != null || typeof x === 'function') {
+    if ((typeof x === 'object' && x != null) || typeof x === 'function') {
         try {
             let then = x.then;
             if (typeof then === 'function') {
@@ -36,6 +36,10 @@ function resolvePromise(promise2, x, resolve, reject) {
     }
 }
 
+function isFunction(func) {
+    return func && typeof func === 'function';
+}
+
 class MyPromise {
 
     constructor(executor) {
@@ -57,6 +61,7 @@ class MyPromise {
 
                 // 执行由 then 方法推入回调队列中的回调
                 this.fulfilledCBQueue.forEach(cb => cb());
+                this.fulfilledCBQueue = [];
             }
         }
 
@@ -65,6 +70,7 @@ class MyPromise {
                 this.reason = reason;
                 this.status = REJECT;
                 this.rejectedCBQueue.forEach(cb => cb());
+                this.rejectedCBQueue = [];
             }
         }
 
@@ -77,53 +83,53 @@ class MyPromise {
     }
 
     then(onFulfilled, onRejected) {
-        onFulfilled = onFulfilled ? onFulfilled : val => val;
-        onRejected = onRejected ? onRejected : reason => { throw reason };
+        onFulfilled = isFunction(onFulfilled) ? onFulfilled : val => val;
+        onRejected = isFunction(onRejected) ? onRejected : reason => { throw reason };
         // 创建新的promise 对象
         const promise2 = new Promise((resolve, reject) => {
             if (this.status == FULFILLED) {
-                setTimeout(() => {
+                queueMicrotask(() => {
                     try {
                         let x = onFulfilled(this.value);
                         resolvePromise(promise2, x, resolve, reject);
                     } catch (error) {
                         reject(error);
                     }
-                }, 0);
+                });
             }
 
             if (this.status == REJECT) {
-                setTimeout(() => {
+                queueMicrotask(() => {
                     try {
                         let x = onRejected(this.reason);
                         resolvePromise(promise2, x, resolve, reject);
                     } catch (error) {
                         reject(error);
                     }
-                }, 0);
+                });
             }
 
             if (this.status == PENDING) {
                 this.fulfilledCBQueue.push(() => {
-                    setTimeout(() => {
+                    queueMicrotask(() => {
                         try {
                             let x = onFulfilled(this.value);
                             resolvePromise(promise2, x, resolve, reject);
                         } catch (error) {
                             reject(error);
                         }
-                    }, 0);
+                    });
                 });
 
                 this.rejectedCBQueue.push(() => {
-                    setTimeout(() => {
+                    queueMicrotask(() => {
                         try {
                             let x = onRejected(this.reason);
                             resolvePromise(promise2, x, resolve, reject);
                         } catch (error) {
                             reject(error);
                         }
-                    }, 0);
+                    });
                 });
             }
         })
@@ -281,5 +287,14 @@ function isIterable(value) {
     }
     return false;
 }
+
+MyPromise.defer = MyPromise.deferred = function () {
+    let dfd = {};
+    dfd.promise = new MyPromise((resolve, reject) => {
+        dfd.resolve = resolve;
+        dfd.reject = reject;
+    });
+    return dfd;
+};
 
 module.exports = MyPromise;
