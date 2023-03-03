@@ -5,3 +5,5 @@
 https://obtainable-nasturtium-6c1.notion.site/promise-52e1526a757845388aee358b2850cfb1、
 
 或者可以查看掘金文章
+
+https://juejin.cn/post/7206239276895780925
