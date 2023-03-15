@@ -1,5 +1,3 @@
-const { reject } = require("./MyPromiseDemo5");
-
 const PENDING = 'PENDING';
 const FULFILLED = 'FULFILLED';
 const REJECT = 'REJECT';
