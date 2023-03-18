@@ -164,7 +164,7 @@ class MyPromise {
 
     static all(promiseArr) {
         if (!isIterable(promiseArr)) { // 判断是否可迭代
-            throw new TypeError(`object ${promiseArr} is not iterable (cannot read property Symbol(Symbol.iterator))`)
+            return MyPromise.reject(throw new TypeError(`object ${promiseArr} is not iterable (cannot read property Symbol(Symbol.iterator))`));
         }
 
         let valueArr = [];
