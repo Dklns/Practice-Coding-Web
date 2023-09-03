@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="index.js"></script>
+</head>
+
+<body>
+    <input type="file" id="input" />
+
+    <script>
+        const input = document.getElementById('input');
+
+        input.addEventListener('change', (e) => {
+            const [file] = e.target.files;
+
+            readImg(file).then(res => {
+                compressImg(res, 'image/png', '1024', '1024', '0.2')
+                    .then(res => {
+                        const img = new Image();
+                        img.src = URL.createObjectURL(res);
+
+                        img.onload = () => {
+                            console.log(img);
+                            document.body.appendChild(img);
+                        }
+                    })
+            })
+        })
+    </script>
+</body>
+
+</html>
